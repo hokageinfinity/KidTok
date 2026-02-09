@@ -2,16 +2,42 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kids Video App</title>
+  <title>KidsFlix</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="feed"></div>
+<!-- Top Header -->
+<header class="top-header">
+  🌈 KidsFlix
+</header>
+
+<!-- Main Content -->
+<div id="content">
+  <div id="feed"></div>
+
+  <!-- Favorites Screen -->
+  <div id="favorites" class="hidden">
+    <h2>⭐ Favorites</h2>
+    <div id="favoritesFeed"></div>
+  </div>
+
+  <!-- Parental Controls -->
+  <div id="parental" class="hidden">
+    <h2>🔒 Parental Controls</h2>
+    <input type="password" id="pinInput" placeholder="Enter Parent PIN">
+    <button onclick="unlockParent()">Unlock</button>
+    <p id="pinStatus"></p>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+  <button onclick="showFeed()">🏠</button>
+  <button onclick="showFavorites()">⭐</button>
+  <button onclick="showParental()">🔒</button>
+</nav>
 
 <script src="app.js"></script>
 </body>
 </html>
-<link rel="apple-touch-icon" href="icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
