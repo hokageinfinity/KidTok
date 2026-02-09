@@ -1,23 +1,23 @@
-body {
-  margin: 0;
-  background: black;
-  overflow: hidden;
-}
-
-#feed {
-  height: 100vh;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-}
-
 .video {
-  height: 100vh;
-  scroll-snap-align: start;
-  pointer-events: auto;
+  position: relative;
 }
+
 iframe {
   width: 100%;
   height: 100%;
   border: none;
-  pointer-events: none;
+}
+
+.tap-overlay {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
