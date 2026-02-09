@@ -27,20 +27,76 @@ let parentMode = false;
 
 /* ---------- DATA ---------- */
 let approvedVideos = [
-  "https://www.youtube.com/embed/qXKsou9UmfY?controls=0&rel=0&modestbranding=1",
-  "https://www.youtube.com/embed/1Up84ZoHQQQ?rel=0",
-  "https://www.youtube.com/embed/e5f-EJ3rlVQ?rel=0",
-"https://www.youtube.com/embed/nbsPlPQJefo?rel=0",
-"https://www.youtube.com/embed/TPvTK-S_VR4?rel=0",
-"https://www.youtube.com/embed/XOnHtStmbCI?rel=0",
-"https://www.youtube.com/embed/UWIxzt1uPUc?rel=0",
-"https://www.youtube.com/embed/vVgv_79abcE?rel=0",
-"https://www.youtube.com/embed/zk5HGN8JXXk?rel=0",
-"https://www.youtube.com/embed/sikpxhmgDj8?rel=0",
-"https://www.youtube.com/embed/FadkRY895fQ?rel=0",
-"https://www.youtube.com/embed/BXzxZUnhQwg?rel=0",
-"https://www.youtube.com/embed/pcoNL1dblm0?rel=0",
-"https://www.youtube.com/embed/xhqaoYr19ZQ?rel=0",
+  {
+    id: "msrachel1",
+    title: "Ms Rachel - Potty Training",
+    url: "https://www.youtube.com/embed/qXKsou9UmfY?controls=0&rel=0&modestbranding=1",
+  },
+  {
+    id: "stevemaggie1",
+    title: "Steve and Maggie - Magic Toy Car",
+    url: "https://www.youtube.com/embed/1Up84ZoHQQQ?rel=0",
+  },
+  {
+    id: "asmr1",
+    title: "ohroyalt - Happy New Year Sweet Coffee Jazz",
+    url: "https://www.youtube.com/embed/e5f-EJ3rlVQ?rel=0",
+  },
+  {
+    id: "hogi1",
+    title: "Hogi - Best Songs of the Month",
+    url: "https://www.youtube.com/embed/nbsPlPQJefo?rel=0",
+  },
+  {
+    id: "Labrador1",
+    title: "SheriffLabrador - Cardboard World",
+    url:"https://www.youtube.com/embed/TPvTK-S_VR4?rel=0",
+  },
+  {
+    id: "disneyjr1",
+    title: "Disney Jr. - Mickey and Donald Have a Farm",
+    url: "https://www.youtube.com/embed/XOnHtStmbCI?rel=0",
+  },
+  {
+    id: "disneyjr2",
+    title: "Disney Jr. - Plutos Puppy-Sitting",
+    url: "https://www.youtube.com/embed/UWIxzt1uPUc?rel=0",
+  },
+  {
+    id: "superwhy1",
+    title: "Super Why - Three Bears Camping",
+    url: "https://www.youtube.com/embed/vVgv_79abcE?rel=0",
+  },
+  {
+    id: "supersimple1",
+    title: "SuperSimpleSongs - Here Comes The Fire Truck",
+    url: "https://www.youtube.com/embed/zk5HGN8JXXk?rel=0",
+  },
+  {
+    id: "dannygo1",
+    title: "DannyGo - Glow Sticks, Animals and More",
+    url: "https://www.youtube.com/embed/sikpxhmgDj8?rel=0",
+  },
+  {
+    id: "dannygo2",
+    title: "DannyGo - Gems Tigers Robots and More",
+    url: "https://www.youtube.com/embed/FadkRY895fQ?rel=0",
+  },
+  {
+    id: "disneyjr3",
+    title: "Little Einstein - Annie and the Beanstalk",
+    url: "https://www.youtube.com/embed/BXzxZUnhQwg?rel=0",
+  },
+  {
+    id: "lingo1",
+    title: "LingoKids - spark Curiosity",
+    url: "https://www.youtube.com/embed/pcoNL1dblm0?rel=0",
+  },
+  {
+    id: "blippi1",
+    title: "Blippi - Sweet Valentine's Day",
+    url: "https://www.youtube.com/embed/xhqaoYr19ZQ?rel=0",
+  },
 ];
 
 let disabledVideos = JSON.parse(localStorage.getItem("disabledVideos")) || [];
