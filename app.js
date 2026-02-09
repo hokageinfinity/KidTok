@@ -17,7 +17,12 @@ const feed = document.getElementById("feed");
 approvedVideos.forEach(url => {
   const div = document.createElement("div");
   div.className = "video";
-  div.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
+  div.innerHTML = `
+<iframe 
+  src="${url}&playsinline=1"
+  allow="autoplay; encrypted-media"
+  playsinline
+></iframe>`;
   feed.appendChild(div);
 });
 document.addEventListener("contextmenu", e => e.preventDefault());
