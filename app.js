@@ -20,3 +20,4 @@ approvedVideos.forEach(url => {
   div.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
   feed.appendChild(div);
 });
+document.addEventListener("contextmenu", e => e.preventDefault());
