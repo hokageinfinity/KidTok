@@ -2,8 +2,25 @@
 let storedPIN = localStorage.getItem("parentPIN");
 
 if (!storedPIN) {
-  storedPIN = prompt("Set a parent PIN (remember this):");
-  localStorage.setItem("parentPIN", storedPIN);
+  let newPIN = null;
+
+  while (!newPIN) {
+    newPIN = prompt("Create a Parent PIN (numbers only):");
+
+    if (newPIN === null) {
+      alert("A parent PIN is required to continue.");
+      newPIN = null;
+    } else {
+      newPIN = newPIN.trim();
+      if (newPIN.length < 4) {
+        alert("PIN must be at least 4 digits.");
+        newPIN = null;
+      }
+    }
+  }
+
+  localStorage.setItem("parentPIN", newPIN);
+  storedPIN = newPIN;
 }
 
 let parentMode = false;
@@ -125,18 +142,18 @@ function showParental() {
 
 /* ---------- PARENT LOGIN ---------- */
 function unlockParent() {
-  const input = document.getElementById("pinInput").value;
+  const input = document.getElementById("pinInput").value.trim();
   const status = document.getElementById("pinStatus");
 
   if (input === storedPIN) {
     parentMode = true;
     document.body.classList.add("parent-mode");
     status.textContent = "Parental Mode Enabled";
+    document.getElementById("pinInput").value = "";
   } else {
     status.textContent = "Wrong PIN";
   }
 }
-
 function logoutParent() {
   parentMode = false;
   document.body.classList.remove("parent-mode");
