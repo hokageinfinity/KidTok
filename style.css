@@ -101,3 +101,28 @@ iframe {
 .fav-btn.active {
   color: gold;
 }
+/* Disable button (parental mode only) */
+.disable-btn {
+  position: absolute;
+  top: 80px;
+  right: 16px;
+  z-index: 25;
+  font-size: 28px;
+  background: rgba(255,0,0,0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: none;
+}
+
+/* Show only in parental mode */
+.parent-mode .disable-btn {
+  display: block;
+}
+
+/* Prevent page drag */
+body {
+  touch-action: pan-y pinch-zoom;
+}
