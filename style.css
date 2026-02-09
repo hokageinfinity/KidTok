@@ -85,3 +85,19 @@ iframe {
   padding: 20px;
   overflow-y: auto;
 }
+/* Favorite star button */
+.fav-btn {
+  position: absolute;
+  right: 16px;
+  bottom: 120px;
+  z-index: 20;
+  font-size: 32px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.fav-btn.active {
+  color: gold;
+}
