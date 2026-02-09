@@ -1,4 +1,4 @@
-const parentPIN = "1234"; // change this later
+const parentPIN = "1234"; // change later
 
 const approvedVideos = [
   "https://www.youtube.com/embed/qXKsou9UmfY?controls=0&rel=0&modestbranding=1",
@@ -16,10 +16,19 @@ function createVideo(url, allowFavorite = true) {
   const div = document.createElement("div");
   div.className = "video";
 
+  const isFav = favorites.includes(url);
+
   div.innerHTML = `
     <div class="tap-overlay">▶ Tap to Play</div>
-    <iframe src="${url}&playsinline=1" playsinline></iframe>
-    ${allowFavorite ? `<button class="fav-btn">⭐</button>` : ""}
+
+    <iframe
+      data-url="${url}"
+      src="${url}&playsinline=1"
+      playsinline
+      allow="autoplay; encrypted-media"
+    ></iframe>
+
+    ${allowFavorite ? `<button class="fav-btn ${isFav ? "active" : ""}">⭐</button>` : ""}
   `;
 
   const overlay = div.querySelector(".tap-overlay");
@@ -27,30 +36,36 @@ function createVideo(url, allowFavorite = true) {
 
   overlay.onclick = () => {
     overlay.style.display = "none";
-    iframe.src += "&autoplay=1";
+    iframe.src = iframe.dataset.url + "&playsinline=1&autoplay=1";
   };
 
   if (allowFavorite) {
-    div.querySelector(".fav-btn").onclick = () => addFavorite(url);
+    const favBtn = div.querySelector(".fav-btn");
+    favBtn.onclick = () => toggleFavorite(url, favBtn);
   }
 
   return div;
 }
 
-/* Load Main Feed */
+/* Load Feed */
 approvedVideos.forEach(url => {
   feed.appendChild(createVideo(url));
 });
 
-/* Favorites Logic */
-function addFavorite(url) {
-  if (!favorites.includes(url)) {
+/* FAVORITES LOGIC */
+function toggleFavorite(url, btn) {
+  if (favorites.includes(url)) {
+    favorites = favorites.filter(v => v !== url);
+    btn.classList.remove("active");
+  } else {
     favorites.push(url);
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-    alert("Added to Favorites ⭐");
+    btn.classList.add("active");
   }
+
+  localStorage.setItem("favorites", JSON.stringify(favorites));
 }
 
+/* Load Favorites Screen */
 function loadFavorites() {
   favoritesFeed.innerHTML = "";
   favorites.forEach(url => {
@@ -58,7 +73,7 @@ function loadFavorites() {
   });
 }
 
-/* Navigation */
+/* NAVIGATION */
 function showFeed() {
   feed.style.display = "block";
   document.getElementById("favorites").classList.add("hidden");
@@ -78,17 +93,35 @@ function showParental() {
   document.getElementById("parental").classList.remove("hidden");
 }
 
-/* Parental PIN */
+/* PARENT PIN */
 function unlockParent() {
   const input = document.getElementById("pinInput").value;
   const status = document.getElementById("pinStatus");
 
-  if (input === parentPIN) {
-    status.textContent = "Unlocked ✔";
-  } else {
-    status.textContent = "Wrong PIN ❌";
-  }
+  status.textContent = input === parentPIN ? "Unlocked ✔" : "Wrong PIN ❌";
 }
 
-/* Disable long press */
+/* AUTO-PAUSE ON SCROLL (KEY FEATURE) */
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      const iframe = entry.target.querySelector("iframe");
+      if (!iframe) return;
+
+      if (!entry.isIntersecting) {
+        // Pause by resetting src (YouTube-safe way)
+        iframe.src = iframe.dataset.url + "&playsinline=1";
+        entry.target.querySelector(".tap-overlay").style.display = "flex";
+      }
+    });
+  },
+  { threshold: 0.6 }
+);
+
+/* Observe all videos */
+document.querySelectorAll(".video").forEach(video => {
+  observer.observe(video);
+});
+
+/* Disable long press (kid safety) */
 document.addEventListener("contextmenu", e => e.preventDefault());
