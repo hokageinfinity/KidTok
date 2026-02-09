@@ -2,6 +2,9 @@ const approvedVideos = [
   // Ms Rachel (official)
   "https://www.youtube.com/embed/qXKsou9UmfY?controls=0&rel=0&modestbranding=1",
 
+// Steve And Maggie (official)
+"https://www.youtube.com/embed/1Up84ZoHQQQ?rel=0",
+  
   // Danny Go (official
   "https://www.youtube.com/embed/mKgl1CiA9Qk?rel=0",
   
