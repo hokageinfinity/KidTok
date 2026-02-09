@@ -1,6 +1,6 @@
 const approvedVideos = [
   // Ms Rachel (official)
-  "https://www.youtube.com/embed/6Zh8nPzZP6o?controls=0",
+  https://www.youtube.com/embed/qXKsou9UmfY?rel=0
 
   // Blippi (official)
   "https://www.youtube.com/embed/5p8lP5x7Zq8?controls=0",
