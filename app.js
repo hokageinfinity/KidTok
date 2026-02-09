@@ -2,8 +2,19 @@ const parentPIN = "1234"; // change later
 
 const approvedVideos = [
   "https://www.youtube.com/embed/qXKsou9UmfY?controls=0&rel=0&modestbranding=1",
-  "https://www.youtube.com/embed/5p8lP5x7Zq8?controls=0&rel=0&modestbranding=1",
-  "https://www.youtube.com/embed/7l3vS8T5YIQ?controls=0&rel=0&modestbranding=1"
+  "https://www.youtube.com/embed/1Up84ZoHQQQ?rel=0",
+  "https://www.youtube.com/embed/e5f-EJ3rlVQ?rel=0",
+"https://www.youtube.com/embed/nbsPlPQJefo?rel=0",
+"https://www.youtube.com/embed/TPvTK-S_VR4?rel=0",
+"https://www.youtube.com/embed/XOnHtStmbCI?rel=0",
+"https://www.youtube.com/embed/UWIxzt1uPUc?rel=0",
+"https://www.youtube.com/embed/vVgv_79abcE?rel=0",
+"https://www.youtube.com/embed/zk5HGN8JXXk?rel=0",
+"https://www.youtube.com/embed/sikpxhmgDj8?rel=0",
+"https://www.youtube.com/embed/FadkRY895fQ?rel=0",
+"https://www.youtube.com/embed/BXzxZUnhQwg?rel=0",
+"https://www.youtube.com/embed/pcoNL1dblm0?rel=0",
+"https://www.youtube.com/embed/xhqaoYr19ZQ?rel=0",
 ];
 
 const feed = document.getElementById("feed");
