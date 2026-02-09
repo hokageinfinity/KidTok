@@ -2,6 +2,9 @@ const approvedVideos = [
   // Ms Rachel (official)
   "https://www.youtube.com/embed/qXKsou9UmfY?controls=0&rel=0&modestbranding=1",
 
+  // Danny Go (official
+  "https://www.youtube.com/embed/mKgl1CiA9Qk?rel=0",
+  
   // Blippi (official)
   "https://www.youtube.com/embed/5p8lP5x7Zq8?controls=0&rel=0&modestbranding=1",
 
