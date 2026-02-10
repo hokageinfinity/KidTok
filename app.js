@@ -31,6 +31,14 @@ let approvedVideos = [
 { id: "dango2", title: "Gems and Tigers", url: "https://www.youtube.com/embed/FadkRY895fQ?rel=0" },
 { id: "einstein1", title: "Annie and The Beanstalk", url: "https://www.youtube.com/embed/BXzxZUnhQwg?rel=0" },
 { id: "lingo1", title: "Spark Curiosity", url: "https://www.youtube.com/embed/pcoNL1dblm0?rel=0" },
+  { id: "pinkfong1", title: "Baby Shark with Sesame Street", url: "https://www.youtube.com/embed/rKVu84yl474?rel=0" },
+{ id: "babyshark1", title: "Baby Shark Learns ABC!", url: "https://www.youtube.com/embed/6mTgBkgEPb8?rel=0" },
+{ id: "walrus1", title: "Counting 1-10 Song", url: "https://www.youtube.com/embed/DR-cfDsHCGA?rel=0" },
+{ id: "lucas1", title: "Learn Numbers, Colors, Shapes, First Words, ABC", url: "https://www.youtube.com/embed/JiMrH5aGms4?rel=0" },
+{ id: "masha1", title: "Masha and the Bear 2026", url: "https://www.youtube.com/embed/_oGfnp1ISnM?rel=0" },
+{ id: "masha2", title: "Masha Live Game Stream", url: "https://www.youtube.com/embed/CqwCXWpxP6Q?rel=0" },
+{ id: "bluey1", title: "Bluey Fantasy Full Episodes!", url: "https://www.youtube.com/embed/zjq2HFKZnSE?rel=0" },
+{ id: "bluey2", title: "Sleepover Party with Bluey and Muffin!", url: "https://www.youtube.com/embed/afJhuKwtjow?rel=0" },
 ];
 
 // Randomize feed on load
