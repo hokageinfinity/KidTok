@@ -117,6 +117,24 @@ iframe {
   display: none;
 }
 
+#disabledPanel {
+  margin-top: 20px;
+}
+
+#disabledPanel .video {
+  background: #222;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.enable-btn {
+  background: green;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
 /* Show only in parental mode */
 .parent-mode .disable-btn {
   display: block;
