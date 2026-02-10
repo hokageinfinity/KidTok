@@ -32,17 +32,20 @@
 
   <!-- Parental Controls -->
   <div id="parental" class="hidden">
-    <h2>🔒 Parental Controls</h2>
-      <div id="disabledPanel">
+  <h2>🔒 Parental Controls</h2>
+
+  <!-- PIN LOGIN -->
+  <input type="password" id="pinInput" placeholder="Enter Parent PIN">
+  <button onclick="unlockParent()">Unlock</button>
+  <button onclick="logoutParent()">Log Out</button>
+  <p id="pinStatus"></p>
+
+  <!-- DISABLED VIDEOS (parent only) -->
+  <div id="disabledPanel" class="hidden">
     <h3>Disabled Videos</h3>
     <div id="disabledFeed"></div>
-    <input type="password" id="pinInput" placeholder="Enter Parent PIN">
-   <button onclick="unlockParent()">Unlock</button>
-    <button onclick="logoutParent()">Log Out</button>
-    <p id="pinStatus"></p>
   </div>
 </div>
-
 <!-- Bottom Navigation -->
 <nav class="bottom-nav">
   <button onclick="showFeed()">🏠</button>
