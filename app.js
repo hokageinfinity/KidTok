@@ -38,6 +38,7 @@ approvedVideos = approvedVideos.sort(() => Math.random() - 0.5);
 /* ---------- ELEMENTS ---------- */
 const feed = document.getElementById("feed");
 const favoritesFeed = document.getElementById("favoritesFeed");
+const disabledFeed = document.getElementById("disabledFeed");
 
 /* ---------- AUTO PAUSE OBSERVER ---------- */
 const observer = new IntersectionObserver(entries => {
@@ -66,6 +67,38 @@ function createVideo(video, allowFavorite = true) {
     ${parentMode ? `<button class="disable-btn">✕</button>` : ""}
   `;
 
+function renderDisabledVideos() {
+  disabledFeed.innerHTML = "";
+
+  if (!parentMode) return;
+
+  if (disabledVideos.length === 0) {
+    disabledFeed.innerHTML = "<p>No disabled videos</p>";
+    return;
+  }
+
+  approvedVideos
+    .filter(v => disabledVideos.includes(v.id))
+    .forEach(video => {
+      const div = document.createElement("div");
+      div.className = "video disabled";
+
+      div.innerHTML = `
+        <p>${video.title}</p>
+        <button class="enable-btn">Enable</button>
+      `;
+
+      div.querySelector(".enable-btn").onclick = () => {
+        disabledVideos = disabledVideos.filter(id => id !== video.id);
+        localStorage.setItem("disabledVideos", JSON.stringify(disabledVideos));
+        renderFeed();
+        renderDisabledVideos();
+      };
+
+      disabledFeed.appendChild(div);
+    });
+}
+  
   const overlay = div.querySelector(".tap-overlay");
   const iframe = div.querySelector("iframe");
 
@@ -86,11 +119,9 @@ function createVideo(video, allowFavorite = true) {
         renderFeed();
       }
     };
-  }
+  
 
-  observer.observe(div);
-  return div;
-}
+
 
 /* ---------- FEED ---------- */
 function renderFeed() {
@@ -99,6 +130,8 @@ function renderFeed() {
   approvedVideos.forEach(video => {
     if (disabledVideos.includes(video.id) && !parentMode) return;
     feed.appendChild(createVideo(video));
+      renderDisabledVideos();
+}
   });
 }
 
