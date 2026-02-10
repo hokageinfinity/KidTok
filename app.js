@@ -1,23 +1,18 @@
-/* ---------- PIN SETUP ---------- */
+/* ---------- STORAGE ---------- */
 let storedPIN = localStorage.getItem("parentPIN");
 let disabledVideos = JSON.parse(localStorage.getItem("disabledVideos")) || [];
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let parentMode = false;
 
+/* ---------- PIN SETUP ---------- */
 if (!storedPIN) {
-  let newPIN = null;
+  let newPIN;
+  do {
+    newPIN = prompt("Create a Parent PIN (at least 4 digits):");
+  } while (!newPIN || newPIN.trim().length < 4);
 
-  while (!newPIN) {
-    newPIN = prompt("Create a Parent PIN (numbers only):");
-
-    if (!newPIN || newPIN.trim().length < 4) {
-      alert("PIN must be at least 4 digits.");
-      newPIN = null;
-    }
-  }
-
-  localStorage.setItem("parentPIN", newPIN.trim());
   storedPIN = newPIN.trim();
+  localStorage.setItem("parentPIN", storedPIN);
 }
 
 /* ---------- DATA ---------- */
@@ -32,25 +27,25 @@ let approvedVideos = [
   { id: "blippi1", title: "Blippi", url: "https://www.youtube.com/embed/xhqaoYr19ZQ?rel=0" },
 ];
 
-// randomize order ONLY
-approvedVideos = approvedVideos.sort(() => Math.random() - 0.5);
+// Randomize feed on load
+approvedVideos.sort(() => Math.random() - 0.5);
 
 /* ---------- ELEMENTS ---------- */
 const feed = document.getElementById("feed");
 const favoritesFeed = document.getElementById("favoritesFeed");
 const disabledFeed = document.getElementById("disabledFeed");
+const disabledPanel = document.getElementById("disabledPanel");
 
-/* ---------- AUTO PAUSE OBSERVER ---------- */
+/* ---------- OBSERVER ---------- */
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    const iframe = entry.target.querySelector("iframe");
-    const overlay = entry.target.querySelector(".tap-overlay");
-
-    if (!iframe || !overlay) return;
-
     if (!entry.isIntersecting) {
-      iframe.src = iframe.dataset.url + "&playsinline=1";
-      overlay.style.display = "flex";
+      const iframe = entry.target.querySelector("iframe");
+      const overlay = entry.target.querySelector(".tap-overlay");
+      if (iframe && overlay) {
+        iframe.src = iframe.dataset.url + "&playsinline=1";
+        overlay.style.display = "flex";
+      }
     }
   });
 }, { threshold: 0.6 });
@@ -62,15 +57,63 @@ function createVideo(video, allowFavorite = true) {
 
   div.innerHTML = `
     <div class="tap-overlay">▶ Tap to Play</div>
-    <iframe data-url="${video.url}" src="${video.url}&playsinline=1" playsinline allow="autoplay"></iframe>
+    <iframe
+      data-url="${video.url}"
+      src="${video.url}&playsinline=1"
+      playsinline
+      allow="autoplay; encrypted-media">
+    </iframe>
+
     ${allowFavorite ? `<button class="fav-btn ${favorites.includes(video.id) ? "active" : ""}">⭐</button>` : ""}
     ${parentMode ? `<button class="disable-btn">✕</button>` : ""}
   `;
 
+  const overlay = div.querySelector(".tap-overlay");
+  const iframe = div.querySelector("iframe");
+
+  overlay.onclick = () => {
+    overlay.style.display = "none";
+    iframe.src = iframe.dataset.url + "&autoplay=1&playsinline=1";
+  };
+
+  if (allowFavorite) {
+    div.querySelector(".fav-btn").onclick = () => toggleFavorite(video.id);
+  }
+
+  if (parentMode) {
+    div.querySelector(".disable-btn").onclick = () => {
+      if (!disabledVideos.includes(video.id)) {
+        disabledVideos.push(video.id);
+        localStorage.setItem("disabledVideos", JSON.stringify(disabledVideos));
+        renderFeed();
+        renderDisabledVideos();
+      }
+    };
+  }
+
+  observer.observe(div);
+  return div;
+}
+
+/* ---------- FEED ---------- */
+function renderFeed() {
+  feed.innerHTML = "";
+  approvedVideos.forEach(video => {
+    if (disabledVideos.includes(video.id) && !parentMode) return;
+    feed.appendChild(createVideo(video));
+  });
+}
+
+/* ---------- DISABLED MANAGER ---------- */
 function renderDisabledVideos() {
   disabledFeed.innerHTML = "";
 
-  if (!parentMode) return;
+  if (!parentMode) {
+    disabledPanel.classList.add("hidden");
+    return;
+  }
+
+  disabledPanel.classList.remove("hidden");
 
   if (disabledVideos.length === 0) {
     disabledFeed.innerHTML = "<p>No disabled videos</p>";
@@ -98,42 +141,6 @@ function renderDisabledVideos() {
       disabledFeed.appendChild(div);
     });
 }
-  
-  const overlay = div.querySelector(".tap-overlay");
-  const iframe = div.querySelector("iframe");
-
-  overlay.onclick = () => {
-    overlay.style.display = "none";
-    iframe.src = video.url + "&autoplay=1&playsinline=1";
-  };
-
-  if (allowFavorite) {
-    div.querySelector(".fav-btn").onclick = () => toggleFavorite(video.id);
-  }
-
-  if (parentMode) {
-    div.querySelector(".disable-btn").onclick = () => {
-      if (!disabledVideos.includes(video.id)) {
-        disabledVideos.push(video.id);
-        localStorage.setItem("disabledVideos", JSON.stringify(disabledVideos));
-        renderFeed();
-      }
-    };
-  
-
-
-
-/* ---------- FEED ---------- */
-function renderFeed() {
-  feed.innerHTML = "";
-
-  approvedVideos.forEach(video => {
-    if (disabledVideos.includes(video.id) && !parentMode) return;
-    feed.appendChild(createVideo(video));
-      renderDisabledVideos();
-}
-  });
-}
 
 /* ---------- FAVORITES ---------- */
 function toggleFavorite(id) {
@@ -146,12 +153,38 @@ function toggleFavorite(id) {
 }
 
 /* ---------- NAV ---------- */
+function showFeed() {
+  feed.style.display = "block";
+  document.getElementById("favorites").classList.add("hidden");
+  document.getElementById("parental").classList.add("hidden");
+}
+
+function showFavorites() {
+  feed.style.display = "none";
+  document.getElementById("favorites").classList.remove("hidden");
+  document.getElementById("parental").classList.add("hidden");
+
+  favoritesFeed.innerHTML = "";
+  approvedVideos
+    .filter(v => favorites.includes(v.id))
+    .forEach(v => favoritesFeed.appendChild(createVideo(v, false)));
+}
+
+function showParental() {
+  feed.style.display = "none";
+  document.getElementById("favorites").classList.add("hidden");
+  document.getElementById("parental").classList.remove("hidden");
+  renderDisabledVideos();
+}
+
+/* ---------- PARENT LOGIN ---------- */
 function unlockParent() {
   const input = document.getElementById("pinInput").value.trim();
   if (input === storedPIN) {
     parentMode = true;
     document.body.classList.add("parent-mode");
     renderFeed();
+    renderDisabledVideos();
   } else {
     alert("Wrong PIN");
   }
@@ -161,6 +194,7 @@ function logoutParent() {
   parentMode = false;
   document.body.classList.remove("parent-mode");
   renderFeed();
+  renderDisabledVideos();
 }
 
 /* ---------- SAFETY ---------- */
