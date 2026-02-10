@@ -1,5 +1,8 @@
 /* ---------- PIN SETUP ---------- */
 let storedPIN = localStorage.getItem("parentPIN");
+let disabledVideos = JSON.parse(localStorage.getItem("disabledVideos")) || [];
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+let parentMode = false;
 
 if (!storedPIN) {
   let newPIN = null;
@@ -7,229 +10,128 @@ if (!storedPIN) {
   while (!newPIN) {
     newPIN = prompt("Create a Parent PIN (numbers only):");
 
-    if (newPIN === null) {
-      alert("A parent PIN is required to continue.");
+    if (!newPIN || newPIN.trim().length < 4) {
+      alert("PIN must be at least 4 digits.");
       newPIN = null;
-    } else {
-      newPIN = newPIN.trim();
-      if (newPIN.length < 4) {
-        alert("PIN must be at least 4 digits.");
-        newPIN = null;
-      }
     }
   }
 
-  localStorage.setItem("parentPIN", newPIN);
-  storedPIN = newPIN;
+  localStorage.setItem("parentPIN", newPIN.trim());
+  storedPIN = newPIN.trim();
 }
-
-let parentMode = false;
 
 /* ---------- DATA ---------- */
 let approvedVideos = [
-  {
-    id: "msrachel1",
-    title: "Ms Rachel - Potty Training",
-    url: "https://www.youtube.com/embed/qXKsou9UmfY?controls=0&rel=0&modestbranding=1",
-  },
-  {
-    id: "stevemaggie1",
-    title: "Steve and Maggie - Magic Toy Car",
-    url: "https://www.youtube.com/embed/1Up84ZoHQQQ?rel=0",
-  },
-  {
-    id: "asmr1",
-    title: "ohroyalt - Happy New Year Sweet Coffee Jazz",
-    url: "https://www.youtube.com/embed/e5f-EJ3rlVQ?rel=0",
-  },
-  {
-    id: "hogi1",
-    title: "Hogi - Best Songs of the Month",
-    url: "https://www.youtube.com/embed/nbsPlPQJefo?rel=0",
-  },
-  {
-    id: "Labrador1",
-    title: "SheriffLabrador - Cardboard World",
-    url:"https://www.youtube.com/embed/TPvTK-S_VR4?rel=0",
-  },
-  {
-    id: "disneyjr1",
-    title: "Disney Jr. - Mickey and Donald Have a Farm",
-    url: "https://www.youtube.com/embed/XOnHtStmbCI?rel=0",
-  },
-  {
-    id: "disneyjr2",
-    title: "Disney Jr. - Plutos Puppy-Sitting",
-    url: "https://www.youtube.com/embed/UWIxzt1uPUc?rel=0",
-  },
-  {
-    id: "superwhy1",
-    title: "Super Why - Three Bears Camping",
-    url: "https://www.youtube.com/embed/vVgv_79abcE?rel=0",
-  },
-  {
-    id: "supersimple1",
-    title: "SuperSimpleSongs - Here Comes The Fire Truck",
-    url: "https://www.youtube.com/embed/zk5HGN8JXXk?rel=0",
-  },
-  {
-    id: "dannygo1",
-    title: "DannyGo - Glow Sticks, Animals and More",
-    url: "https://www.youtube.com/embed/sikpxhmgDj8?rel=0",
-  },
-  {
-    id: "dannygo2",
-    title: "DannyGo - Gems Tigers Robots and More",
-    url: "https://www.youtube.com/embed/FadkRY895fQ?rel=0",
-  },
-  {
-    id: "disneyjr3",
-    title: "Little Einstein - Annie and the Beanstalk",
-    url: "https://www.youtube.com/embed/BXzxZUnhQwg?rel=0",
-  },
-  {
-    id: "lingo1",
-    title: "LingoKids - spark Curiosity",
-    url: "https://www.youtube.com/embed/pcoNL1dblm0?rel=0",
-  },
-  {
-    id: "blippi1",
-    title: "Blippi - Sweet Valentine's Day",
-    url: "https://www.youtube.com/embed/xhqaoYr19ZQ?rel=0",
-  },
+  { id: "msrachel1", title: "Ms Rachel", url: "https://www.youtube.com/embed/qXKsou9UmfY?controls=0&rel=0" },
+  { id: "stevemaggie1", title: "Steve and Maggie", url: "https://www.youtube.com/embed/1Up84ZoHQQQ?rel=0" },
+  { id: "asmr1", title: "Coffee Jazz", url: "https://www.youtube.com/embed/e5f-EJ3rlVQ?rel=0" },
+  { id: "hogi1", title: "Hogi Songs", url: "https://www.youtube.com/embed/nbsPlPQJefo?rel=0" },
+  { id: "labrador1", title: "Sheriff Labrador", url: "https://www.youtube.com/embed/TPvTK-S_VR4?rel=0" },
+  { id: "disneyjr1", title: "Disney Jr Farm", url: "https://www.youtube.com/embed/XOnHtStmbCI?rel=0" },
+  { id: "superwhy1", title: "Super Why", url: "https://www.youtube.com/embed/vVgv_79abcE?rel=0" },
+  { id: "blippi1", title: "Blippi", url: "https://www.youtube.com/embed/xhqaoYr19ZQ?rel=0" },
 ];
 
-let disabledVideos = JSON.parse(localStorage.getItem("disabledVideos")) || [];
-let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-/* ---------- RANDOMIZE FEED ---------- */
-approvedVideos = approvedVideos
-  .filter(v => !disabledVideos.includes(v))
-  .sort(() => Math.random() - 0.5);
+// randomize order ONLY
+approvedVideos = approvedVideos.sort(() => Math.random() - 0.5);
 
 /* ---------- ELEMENTS ---------- */
 const feed = document.getElementById("feed");
 const favoritesFeed = document.getElementById("favoritesFeed");
 
-/* ---------- VIDEO CARD ---------- */
-function createVideo(url, allowFavorite = true) {
-  const div = document.createElement("div");
-  div.className = "video";
-
-  const isFav = favorites.includes(url);
-
-  div.innerHTML = `
-    <div class="tap-overlay">▶ Tap to Play</div>
-
-    <iframe
-      data-url="${url}"
-      src="${url}&playsinline=1"
-      playsinline
-      allow="autoplay; encrypted-media"
-    ></iframe>
-
-    ${allowFavorite ? `<button class="fav-btn ${isFav ? "active" : ""}">⭐</button>` : ""}
-    <button class="disable-btn">✕</button>
-  `;
-
-  const overlay = div.querySelector(".tap-overlay");
-  const iframe = div.querySelector("iframe");
-  const disableBtn = div.querySelector(".disable-btn");
-
-  overlay.onclick = () => {
-    overlay.style.display = "none";
-    iframe.src = iframe.dataset.url + "&playsinline=1&autoplay=1";
-  };
-
-  if (allowFavorite) {
-    div.querySelector(".fav-btn").onclick = () => toggleFavorite(url);
-  }
-
-  disableBtn.onclick = () => {
-    if (!parentMode) return;
-    disabledVideos.push(url);
-    localStorage.setItem("disabledVideos", JSON.stringify(disabledVideos));
-    div.remove();
-  };
-
-  return div;
-}
-
-/* ---------- LOAD FEED ---------- */
-approvedVideos.forEach(url => {
-  feed.appendChild(createVideo(url));
-});
-
-/* ---------- FAVORITES ---------- */
-function toggleFavorite(url) {
-  favorites = favorites.includes(url)
-    ? favorites.filter(v => v !== url)
-    : [...favorites, url];
-
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-}
-
-function loadFavorites() {
-  favoritesFeed.innerHTML = "";
-  favorites.forEach(url => {
-    favoritesFeed.appendChild(createVideo(url, false));
-  });
-}
-
-/* ---------- NAV ---------- */
-function showFeed() {
-  feed.style.display = "block";
-  document.getElementById("favorites").classList.add("hidden");
-  document.getElementById("parental").classList.add("hidden");
-}
-
-function showFavorites() {
-  feed.style.display = "none";
-  document.getElementById("favorites").classList.remove("hidden");
-  document.getElementById("parental").classList.add("hidden");
-  loadFavorites();
-}
-
-function showParental() {
-  feed.style.display = "none";
-  document.getElementById("favorites").classList.add("hidden");
-  document.getElementById("parental").classList.remove("hidden");
-}
-
-/* ---------- PARENT LOGIN ---------- */
-function unlockParent() {
-  const input = document.getElementById("pinInput").value.trim();
-  const status = document.getElementById("pinStatus");
-
-  if (input === storedPIN) {
-    parentMode = true;
-    document.body.classList.add("parent-mode");
-    status.textContent = "Parental Mode Enabled";
-    document.getElementById("pinInput").value = "";
-  } else {
-    status.textContent = "Wrong PIN";
-  }
-}
-function logoutParent() {
-  parentMode = false;
-  document.body.classList.remove("parent-mode");
-  document.getElementById("pinStatus").textContent = "Logged out";
-}
-
-/* ---------- AUTO PAUSE ---------- */
+/* ---------- AUTO PAUSE OBSERVER ---------- */
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     const iframe = entry.target.querySelector("iframe");
     const overlay = entry.target.querySelector(".tap-overlay");
 
-    if (!entry.isIntersecting && iframe) {
+    if (!iframe || !overlay) return;
+
+    if (!entry.isIntersecting) {
       iframe.src = iframe.dataset.url + "&playsinline=1";
       overlay.style.display = "flex";
     }
   });
 }, { threshold: 0.6 });
 
-document.querySelectorAll(".video").forEach(v => observer.observe(v));
+/* ---------- VIDEO CARD ---------- */
+function createVideo(video, allowFavorite = true) {
+  const div = document.createElement("div");
+  div.className = "video";
+
+  div.innerHTML = `
+    <div class="tap-overlay">▶ Tap to Play</div>
+    <iframe data-url="${video.url}" src="${video.url}&playsinline=1" playsinline allow="autoplay"></iframe>
+    ${allowFavorite ? `<button class="fav-btn ${favorites.includes(video.id) ? "active" : ""}">⭐</button>` : ""}
+    ${parentMode ? `<button class="disable-btn">✕</button>` : ""}
+  `;
+
+  const overlay = div.querySelector(".tap-overlay");
+  const iframe = div.querySelector("iframe");
+
+  overlay.onclick = () => {
+    overlay.style.display = "none";
+    iframe.src = video.url + "&autoplay=1&playsinline=1";
+  };
+
+  if (allowFavorite) {
+    div.querySelector(".fav-btn").onclick = () => toggleFavorite(video.id);
+  }
+
+  if (parentMode) {
+    div.querySelector(".disable-btn").onclick = () => {
+      if (!disabledVideos.includes(video.id)) {
+        disabledVideos.push(video.id);
+        localStorage.setItem("disabledVideos", JSON.stringify(disabledVideos));
+        renderFeed();
+      }
+    };
+  }
+
+  observer.observe(div);
+  return div;
+}
+
+/* ---------- FEED ---------- */
+function renderFeed() {
+  feed.innerHTML = "";
+
+  approvedVideos.forEach(video => {
+    if (disabledVideos.includes(video.id) && !parentMode) return;
+    feed.appendChild(createVideo(video));
+  });
+}
+
+/* ---------- FAVORITES ---------- */
+function toggleFavorite(id) {
+  favorites = favorites.includes(id)
+    ? favorites.filter(v => v !== id)
+    : [...favorites, id];
+
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+  renderFeed();
+}
+
+/* ---------- NAV ---------- */
+function unlockParent() {
+  const input = document.getElementById("pinInput").value.trim();
+  if (input === storedPIN) {
+    parentMode = true;
+    document.body.classList.add("parent-mode");
+    renderFeed();
+  } else {
+    alert("Wrong PIN");
+  }
+}
+
+function logoutParent() {
+  parentMode = false;
+  document.body.classList.remove("parent-mode");
+  renderFeed();
+}
 
 /* ---------- SAFETY ---------- */
 document.addEventListener("contextmenu", e => e.preventDefault());
+
+/* ---------- INIT ---------- */
+renderFeed();
