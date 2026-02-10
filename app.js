@@ -25,6 +25,12 @@ let approvedVideos = [
   { id: "disneyjr1", title: "Disney Jr Farm", url: "https://www.youtube.com/embed/XOnHtStmbCI?rel=0" },
   { id: "superwhy1", title: "Super Why", url: "https://www.youtube.com/embed/vVgv_79abcE?rel=0" },
   { id: "blippi1", title: "Blippi", url: "https://www.youtube.com/embed/xhqaoYr19ZQ?rel=0" },
+  { id: "disneyjr2", title: "Puppy Sitting", url: "https://www.youtube.com/embed/UWIxzt1uPUc?rel=0" },
+{ id: "supersimple1", title: "Here Comes The Fire Truck", url: "https://www.youtube.com/embed/zk5HGN8JXXk?rel=0" },
+{ id: "dango1", title: "Glowsticks and Animals", url: "https://www.youtube.com/embed/sikpxhmgDj8?rel=0" },
+{ id: "dango2", title: "Gems and Tigers", url: "https://www.youtube.com/embed/FadkRY895fQ?rel=0" },
+{ id: "einstein1", title: "Annie and The Beanstalk", url: "https://www.youtube.com/embed/BXzxZUnhQwg?rel=0" },
+{ id: "lingo1", title: "Spark Curiosity", url: "https://www.youtube.com/embed/pcoNL1dblm0?rel=0" },
 ];
 
 // Randomize feed on load
